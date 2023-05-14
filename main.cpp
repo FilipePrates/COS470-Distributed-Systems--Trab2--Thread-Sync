@@ -13,13 +13,21 @@ atomic<int> somaTotal;
 // variável pro spinlock busy-wait
 atomic_flag lock = ATOMIC_FLAG_INIT;
 
+void acquire(){
+    while (lock.test_and_set()) {}
+}
+
+void release(){
+    lock.clear();
+}
+
 void soma(int start, int end) {
     int somaLocal = 0;
     for (int i = start; i < end; i++) somaLocal += vetorASerSomado[i];
-    while (lock.test_and_set()) {}
+    acquire();
     somaTotal += somaLocal;
     cout << somaLocal << endl;
-    lock.clear();
+    release();
 }
 
 int main() {

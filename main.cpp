@@ -16,7 +16,6 @@ atomic_flag lock = ATOMIC_FLAG_INIT;
 void acquire(){
     while (lock.test_and_set()) {}
 }
-
 void release(){
     lock.clear();
 }
@@ -26,7 +25,6 @@ void soma(int start, int end) {
     for (int i = start; i < end; i++) somaLocal += vetorASerSomado[i];
     acquire();
     somaTotal += somaLocal;
-    cout << somaLocal << endl;
     release();
 }
 
@@ -44,9 +42,7 @@ int main() {
     double total_time = 0.0;
     thread threads[K];
     for (int i = 0; i < K; i++) {
-        int s = i * (N / K);
-        int e = (i == K-1) ? N : (i+1) * (N / K);
-        threads[i] = thread(soma, s, e);
+        threads[i] = thread(soma, i * (N / K), (i == K-1) ? N : (i+1) * (N / K));
     }
     auto tempo0 = chrono::high_resolution_clock::now();
     for (int i = 0; i < K; i++) {
@@ -54,7 +50,7 @@ int main() {
     }
     auto tempo1 = chrono::high_resolution_clock::now();
     auto tempo_total = chrono::duration_cast<chrono::microseconds>(tempo1 - tempo0).count();
-    cout << tempo_total;
+    cout << "Tempo total: " << tempo_total << endl;
     if (somaTotal != somaSingleThread) {
         cout << "Soma incorreta" << endl;
         return -1;

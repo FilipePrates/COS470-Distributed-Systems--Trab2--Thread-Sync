@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int N = 10000000;
+const int N = 1000000000;
 int vetorASerSomado[N];
 int K;
 
@@ -31,6 +31,7 @@ void soma(int start, int end) {
 int main() {
     cout << "Quantas Threads?"; 
     cin >> K;
+    somaTotal = 0;
     for (int i = 0; i < N; i++) {
         vetorASerSomado[i] = rand() % 201 - 100;
     }
@@ -39,22 +40,25 @@ int main() {
         somaSingleThread += vetorASerSomado[i];
     }
     cout << "Soma correta: " << somaSingleThread << endl;
-    double total_time = 0.0;
-    thread threads[K];
-    for (int i = 0; i < K; i++) {
-        threads[i] = thread(soma, i * (N / K), (i == K-1) ? N : (i+1) * (N / K));
+    for (int batch = 0; batch < 1; batch ++){
+        thread threads[K];
+        for (int i = 0; i < K; i++) {
+            threads[i] = thread(soma, i * (N / K), (i == K-1) ? N : (i+1) * (N / K));
+        }
+        auto tempo0 = chrono::high_resolution_clock::now();
+        for (int i = 0; i < K; i++) {
+            threads[i].join();
+        }
+        auto tempo1 = chrono::high_resolution_clock::now();
+        auto tempo_total = chrono::duration_cast<chrono::microseconds>(tempo1 - tempo0).count();
+        // cout << "Tempo Batch: " << batch << " " << tempo_total / 1000000.0 << "s" << endl;
+        cout << tempo_total/1000000.0 << ",";
+        if (somaTotal != somaSingleThread) {
+            cout << "Erro" << endl;
+            return -1;
+        }
+        somaTotal = 0;
     }
-    auto tempo0 = chrono::high_resolution_clock::now();
-    for (int i = 0; i < K; i++) {
-        threads[i].join();
-    }
-    auto tempo1 = chrono::high_resolution_clock::now();
-    auto tempo_total = chrono::duration_cast<chrono::microseconds>(tempo1 - tempo0).count();
-    cout << "Tempo total: " << tempo_total << endl;
-    if (somaTotal != somaSingleThread) {
-        cout << "Soma incorreta" << endl;
-        return -1;
-    }
-    somaTotal = 0;
+    cout << endl;
     return 0;
 }

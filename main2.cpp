@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include <atomic>
 #include <condition_variable>
 #include <chrono>
 #include <vector>
@@ -9,6 +10,7 @@
 
 using namespace std;
 
+
 const int BUFFER_SIZE = 10;
 int P;
 int C;
@@ -16,8 +18,23 @@ queue<int> buffer;
 mutex mtx;
 condition_variable posicoes_vazias;
 condition_variable posicoes_cheias;
-
+// Número de números consumidos
+atomic<int> num_consumed;
+atomic_flag numConsumedLock = ATOMIC_FLAG_INIT;
+void acquire(){
+    while (numConsumedLock.test_and_set()) {}
+}
+void release(){
+    numConsumedLock.clear();
+}
 bool isPrime(int num){
+    acquire();
+    num_consumed++;
+    cout << num_consumed << endl;
+    if(num_consumed > 10000){
+        terminate();
+    }
+    release();
     for (int i = 2; i <= num / 2; ++i) {
         if (num % i == 0) {
             return false;

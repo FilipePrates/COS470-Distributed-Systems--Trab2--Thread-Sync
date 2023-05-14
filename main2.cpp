@@ -14,6 +14,7 @@ using namespace std;
 const int BUFFER_SIZE = 10;
 int P;
 int C;
+auto tempo0 = chrono::high_resolution_clock::now();
 queue<int> buffer;
 mutex mtx;
 condition_variable posicoes_vazias;
@@ -30,8 +31,11 @@ void release(){
 bool isPrime(int num){
     acquire();
     num_consumed++;
-    cout << num_consumed << endl;
-    if(num_consumed > 10000){
+    // cout << num_consumed << endl;
+    if(num_consumed > 1000){
+        auto tempo1 = chrono::high_resolution_clock::now();
+        auto tempo_total = chrono::duration_cast<chrono::microseconds>(tempo1 - tempo0).count();
+        cout << tempo_total/1000000.0 << endl;
         terminate();
     }
     release();
@@ -52,7 +56,7 @@ void produtor() {
             // Aguarda até ter posições vazias
             posicoes_vazias.wait(lock, []{return buffer.size() < BUFFER_SIZE;});
             buffer.push(num);
-            cout << "Produziu " << num << " (posições ocupadas:" << buffer.size() << ")" << std::endl;
+            // cout << "Produziu " << num << " (posições ocupadas:" << buffer.size() << ")" << std::endl;
             posicoes_cheias.notify_one();
         }
         this_thread::sleep_for(chrono::milliseconds(30));
@@ -68,11 +72,11 @@ void consumidor() {
             posicoes_cheias.wait(lock, []{return !buffer.empty();});
             num = buffer.front();
             buffer.pop();
-            cout << "Consumiu  " << num << " (posições ocupadas:" << buffer.size() << ")" << endl;
+            // cout << "Consumiu  " << num << " (posições ocupadas:" << buffer.size() << ")" << endl;
             posicoes_vazias.notify_one();
         }
         bool is_prime = isPrime(num);
-        cout << "É Primo? " << is_prime << endl;
+        // cout << "É Primo? " << is_prime << endl;
         this_thread::sleep_for(chrono::milliseconds(30));
     }
 }
@@ -91,6 +95,7 @@ int main() {
     for(int j = 0; j < C; j++){
         consumidores[j] = thread(consumidor);
     }
+    tempo0 = chrono::high_resolution_clock::now();
     for(int i = 0; i < P; i++){
         produtores[i].join();
     }

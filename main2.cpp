@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>  
+#include <string>
+#include <sstream>
 #include <thread>
 #include <mutex>
 #include <atomic>
@@ -10,18 +13,22 @@
 
 using namespace std;
 
-
-const int BUFFER_SIZE = 10;
+const int M = 100000;
+const int N = 10000000;
+int BUFFER_SIZE;
 int P;
 int C;
-auto tempo0 = chrono::high_resolution_clock::now();
+int howFilledIsTheBuffer[M];
 queue<int> buffer;
 mutex mtx;
 condition_variable posicoes_vazias;
 condition_variable posicoes_cheias;
+int outp
 // Número de números consumidos
 atomic<int> num_consumed;
 atomic_flag numConsumedLock = ATOMIC_FLAG_INIT;
+auto tempo0 = chrono::high_resolution_clock::now();
+
 void acquire(){
     while (numConsumedLock.test_and_set()) {}
 }
@@ -31,11 +38,22 @@ void release(){
 bool isPrime(int num){
     acquire();
     num_consumed++;
+    howFilledIsTheBuffer[num_consumed] = buffer.size();
     // cout << num_consumed << endl;
-    if(num_consumed > 1000){
+    if(num_consumed > M){
         auto tempo1 = chrono::high_resolution_clock::now();
         auto tempo_total = chrono::duration_cast<chrono::microseconds>(tempo1 - tempo0).count();
         cout << tempo_total/1000000.0 << endl;
+        ostringstream oss;
+        oss << "outputBuffer_" << BUFFER_SIZE << "_" << P << "_" << C << ".txt";
+        ofstream fout(oss.str());
+        if (fout.is_open())
+        {
+            for(int i = 0; i < M; i++){
+                fout << howFilledIsTheBuffer[i] << ",";
+            }
+            fout.close();
+        }
         terminate();
     }
     release();
@@ -50,7 +68,7 @@ bool isPrime(int num){
 void produtor() {
     int num;
     while (true) {
-        num = rand() % 10000000 + 1;
+        num = rand() % N + 1;
         {
             unique_lock<mutex> lock(mtx);
             // Aguarda até ter posições vazias
@@ -59,7 +77,7 @@ void produtor() {
             // cout << "Produziu " << num << " (posições ocupadas:" << buffer.size() << ")" << std::endl;
             posicoes_cheias.notify_one();
         }
-        this_thread::sleep_for(chrono::milliseconds(30));
+        // this_thread::sleep_for(chrono::milliseconds(30));
     }
 }
 
@@ -77,11 +95,13 @@ void consumidor() {
         }
         bool is_prime = isPrime(num);
         // cout << "É Primo? " << is_prime << endl;
-        this_thread::sleep_for(chrono::milliseconds(30));
+        // this_thread::sleep_for(chrono::milliseconds(30));
     }
 }
 
 int main() {
+    cout << "Tamanho do Buffer? " << endl;
+    cin >> BUFFER_SIZE;
     cout << "Quantos Produtores? " << endl;
     cin >> P;
     cout << "Quantos Consumidores? " << endl;

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int N = 1000000000;
+const int N = 10000000;
 int vetorASerSomado[N];
 int K;
 

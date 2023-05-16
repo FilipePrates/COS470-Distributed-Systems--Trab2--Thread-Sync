@@ -23,7 +23,6 @@ queue<int> buffer;
 mutex mtx;
 condition_variable posicoes_vazias;
 condition_variable posicoes_cheias;
-int outp
 // Número de números consumidos
 atomic<int> num_consumed;
 atomic_flag numConsumedLock = ATOMIC_FLAG_INIT;
@@ -35,6 +34,7 @@ void acquire(){
 void release(){
     numConsumedLock.clear();
 }
+
 bool isPrime(int num){
     acquire();
     num_consumed++;
@@ -43,7 +43,7 @@ bool isPrime(int num){
     if(num_consumed > M){
         auto tempo1 = chrono::high_resolution_clock::now();
         auto tempo_total = chrono::duration_cast<chrono::microseconds>(tempo1 - tempo0).count();
-        cout << tempo_total/1000000.0 << endl;
+        cout << "Finalizou: " << tempo_total/1000000.0 << "s" << endl;
         ostringstream oss;
         oss << "outputBuffer_" << BUFFER_SIZE << "_" << P << "_" << C << ".txt";
         ofstream fout(oss.str());
@@ -77,7 +77,6 @@ void produtor() {
             // cout << "Produziu " << num << " (posições ocupadas:" << buffer.size() << ")" << std::endl;
             posicoes_cheias.notify_one();
         }
-        // this_thread::sleep_for(chrono::milliseconds(30));
     }
 }
 
@@ -95,7 +94,6 @@ void consumidor() {
         }
         bool is_prime = isPrime(num);
         // cout << "É Primo? " << is_prime << endl;
-        // this_thread::sleep_for(chrono::milliseconds(30));
     }
 }
 

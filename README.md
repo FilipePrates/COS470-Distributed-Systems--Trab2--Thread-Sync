@@ -85,13 +85,13 @@ Todas as runs:
 | 100  | 41.3755           | 22.3656           | 15.782            | 11.4846           | 42.2354           | 42.4024           | 43.2661           |
 | 1000 | 41.3499           | 22.3815           | 13.7577           | 10.7538           | 41.9305           | 41.7098           | 42.5141           |
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled.png)
+![Untitled](README/Untitled.png)
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled%201.png)
+![Untitled](README/Untitled%201.png)
 
 Podemos concluir que o número de Consumidores é bem mais importante para o tempo de execução comparado ao número de produtores. O que faz sentido, já que consumir um número e determinar se é primo é significativamente mais complexo que gerar um número aleatório, logo um só produtor pode produzir para muitos consumidores.
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled%202.png)
+![Untitled](README/Untitled%202.png)
 
 Além disso, quanto maior o buffer, mais tempo estamos ativamente produzindo e consumindo, e menos tempo parado esperando o buffer esvaziar ou encher, logo tem um impacto no tempo de execução. Porém o buffer pode ser grande o suficiente que a velocidade de consumação é suficiente para nunca encher o buffer, ou se a produção for muito mais rápida o buffer vai sempre estar cheio, a partir desses momentos um buffer maior não determina um tempo de execução menor, como no nosso experimento t(produzir) << t(consumir), não influenciou tanto (segundo caso); No caso que t(produzir) ~= t(consumir) provavelmente influencia mais.
 
@@ -101,22 +101,22 @@ Gravei o quão cheio estava o buffer (buffer.size()) em cada momento que um cons
 
 O resultado foi posto em gráficos através de python/pandas/seaborn, com um “zoom” maior ([100] primeiros elementos), conseguimos ver claramente o Buffer enchendo e esvaziando, na medida que o Consumidor ia retirando os elementos do buffer.
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled%203.png)
+![Untitled](README/Untitled%203.png)
 
 A medida que visualizamos um tempo maior ([500] primeiros elementos consumidos), vemos como as threads estão sendo escalonadas com outros processos.
 Com mais consumidores conseguimos ver que o Buffer fica mais tempo vazio.
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled%204.png)
+![Untitled](README/Untitled%204.png)
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled%205.png)
+![Untitled](README/Untitled%205.png)
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled%206.png)
+![Untitled](README/Untitled%206.png)
 
 Com um buffer maior o preenchimento/esvaziamento é mais “contínuo”, e percebemos claramente as interrupções regulares (não está claro pra mim o que seriam, interrupções da SO que os produtores ficam regularmente um tempo sem atuar? Imaginaria que com Np > 2 esses Gaps ficariam menores/diferentes (padrão de overlap de pausas))
 
 Vemos, ao chegar nos gráficos de buffer de 1000 elementos, vemos quase retângulos, já que enquanto os Produtores estão rodando, o buffer sempre fica cheio (é rápido encher e demora esvaziar), e quando não estão, o buffer rapidamente zera e espera os Produtores voltarem)
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled%207.png)
+![Untitled](README/Untitled%207.png)
 
 Todos os gráficos estão disponíveis no arquivo [/outputBuffersData/outputBufferGraphs.ipynb](https://github.com/FilipePrates/COS470-Distributed-Systems--Trab2--Thread-Sync/blob/main/outputBuffersData/outputBufferGraphs.ipynb).
 
@@ -159,11 +159,11 @@ Estudo de Caso (valores médios em segundos de tempo de execução, média de 10
 
 N = $10^7$
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled%208.png)
+![Untitled](README/Untitled%208.png)
 
 N = $10^8$
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled%209.png)
+![Untitled](README/Untitled%209.png)
 
 N = $10^9$
 
@@ -185,10 +185,10 @@ Na terceira coluna os resultados de runs individuais (demorou bastante a ponto d
 | K = 128 | 2.1300516 | 0.971584,0.893767,1.35458,0.982905,1.45732,1.65724,1.50404,2.74034,7.73725,2.00149 |
 | K = 256 | 1.8777493 | 0.838451,0.617362,1.3238,1.17896,2.15682,2.84061,2.39025,2.44053,3.0351,1.95561    |
 
-![Untitled](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/Untitled%2010.png)
+![Untitled](README/Untitled%2010.png)
 
 ---
 
 ### Enunciado
 
-[TP2.pdf](Trabalho%20Pra%CC%81tico%202%20-%20Relato%CC%81rio%2016a4cbd1d1a0485189df7e54739a3a8b/TP2.pdf)
+[WrittenReport.pdf](README/WrittenReport.pdf)

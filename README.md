@@ -111,7 +111,7 @@ Com mais consumidores conseguimos ver que o Buffer fica mais tempo vazio.
 
 Com um buffer maior o preenchimento/esvaziamento é mais “contínuo”, e percebemos claramente as interrupções regulares (não está claro pra mim o que seriam, interrupções da SO que os produtores ficam regularmente um tempo sem atuar? Imaginaria que com Np > 2 esses Gaps ficariam menores/diferentes (padrão de overlap de pausas))
 
-Vemos, ao chegar nos gráficos de buffer de 1000 elementos, vemos quase retângulos, já que enquanto os Produtores estão rodando, o buffer sempre fica cheio (é rápido encher e demora esvaziar), e quando não estão, o buffer rapidamente zera e espera os Produtores voltarem)
+Vemos, ao chegar nos gráficos de buffer de 1000 elementos, quase retângulos, já que enquanto os Produtores estão rodando, o buffer sempre fica cheio (é rápido encher e demora esvaziar), e quando não estão, o buffer rapidamente zera e espera os Produtores voltarem)
 
 ![Untitled](README/Untitled%207.png)
 

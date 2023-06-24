@@ -20,9 +20,6 @@ g++ -o Main2 main2.cpp
 
 Filipe Prates - 116011311
 
-O objetivo deste trabalho é se familiarizar com threads e mecanismos de sincronização entre
-threads.
-
 Código fonte:
 
 [https://github.com/FilipePrates/COS470-Distributed-Systems--Trab2--Thread-Sync](https://github.com/FilipePrates/COS470-Distributed-Systems--Trab2--Thread-Sync)

@@ -1,5 +1,4 @@
 # COS470 - Distributed Systems Thread-sync - Trabalho Prático 2
-
 ```
 g++ -o Main main.cpp -mcmodel=large
 ```
@@ -19,10 +18,7 @@ g++ -o Main2 main2.cpp
 ---
 
 Filipe Prates - 116011311
-
-Código fonte:
-
-[https://github.com/FilipePrates/COS470-Distributed-Systems--Trab2--Thread-Sync](https://github.com/FilipePrates/COS470-Distributed-Systems--Trab2--Thread-Sync)
+Enunciado: [https://www.cos.ufrj.br/~daniel/sd/trabalhos/TP2.pdf](https://www.cos.ufrj.br/~daniel/sd/trabalhos/TP2.pdf)
 
 Utilizado WSL, processador 2 núcleos / 4 Processadores lógicos
 Intel(R) Core(TM) i5-10300H CPU @ 2.50GHz / 8GB RAM / (porém WSL com acesso à 4GB)
